@@ -1,0 +1,48 @@
+Hadoop Pre-requisites:
+1) Navigate to Project location: C:\Users\gauravpawar\Documents\project\Big Data-20241113T043929Z-001\US food project\hadoop\CS531_project
+
+2) Compile the Code: mvn compile
+This will compile the source code in the src/main/java directory.
+
+3) Package the JAR File: mvn package
+This will create a JAR file in the target directory of your project.
+
+4) Run the JAR File (Optional): If your project includes a main method, you can run the JAR file with: java -jar target\myproject-1.0-SNAPSHOT.jar
+or hadoop jar target/CS531_project-1.0-SNAPSHOT.jar /path/to/input/file /path/to/output/directory
+
+RUN Hadoop code (VS code start from here ):
+1)Open a terminal in the Hadoop project directory: cd Hadoop
+2)Build and start the Hadoop container: docker-compose build  docker-compose up -d
+3)Access the Hadoop container’s shell: docker-compose exec hadoop bash
+  More about command: docker-compose exec:
+  This subcommand allows you to run a command inside a running container of a docker-compose project.
+
+Now, Prepare the Input Files, Copy input data files into the container
+4)Copy input data files into the container: Run this command in your terminal (outside the container): docker cp C:\Users\gauravpawar\Documents\project\Big Data-20241113T043929Z-001\US food project\hadoop\data\SupplementalDataCounty.csv <hadoop-container-id>:/home/CS531_project/data/
+
+5) Verify the file exists in the container: Inside the container, check the directory: ls /home/CS531_project/data/
+
+Now, Compile the Hadoop Java Code
+
+6)Navigate to the Java project directory in the container: cd /home/CS531_project
+
+7)Build the JAR file using Maven: mvn package
+
+8)Verify the JAR file is created: ls target/
+
+Now, Run the JAR File in Hadoop
+Note: Ensure the Output Directory Does Not Exist. Delete the output directory before re-running.
+
+9) Run Task 1 (state population calculation): hadoop jar target/CS531_project-1.0-SNAPSHOT.jar /home/CS531_project/data/SupplementalDataCounty.csv /home/CS531_project/output_task1
+
+10)Run Task 2 (Grocery store comparison): hadoop jar target/CS531_project-2.0-SNAPSHOT.jar /home/CS531_project/data/StateAndCountyData.csv /home/CS531_project/output_task2
+
+Now, Retrieve and View the Results
+11)Check the output directory for results: ls /home/CS531_project/output_task1         ls /home/CS531_project/output_task2
+
+RUN Spark code:
+
+1)Navigate to the Spark folder: cd spark
+2)Build and start Docker: docker compose build    docker compose up
+3)Look for the Jupyter Notebook URL in the terminal output. It will look like: http://127.0.0.1:8888/lab?token=<generated_token>
+4) Clear output of all cells and run cells one-by-ne

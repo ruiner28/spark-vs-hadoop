@@ -1,0 +1,18 @@
+version: '3'
+services:
+  hadoop:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data:/home/data
+      - ./CS531_project:/home/CS531_project
+    container_name: hadoop_dev
+    ports:
+      - 9000:9000
+    tty: true
+    stdin_open: true
+    environment:
+      - HADOOP_HOME=/opt/hadoop
+      - JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+    command: ["/bin/bash"]

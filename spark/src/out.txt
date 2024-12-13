@@ -1,0 +1,33 @@
+== Parsed Logical Plan ==
+'Sort ['state ASC NULLS FIRST], true
++- 'Aggregate ['state], ['state, 'avg('value) AS avg#270]
+   +- 'Filter ('variable_code = PCT_LACCESS_POP15)
+      +- 'UnresolvedRelation [state_county], [], false
+
+== Analyzed Logical Plan ==
+state: string, avg: double
+Sort [state#234 ASC NULLS FIRST], true
++- Aggregate [state#234], [state#234, avg(cast(value#237 as double)) AS avg#270]
+   +- Filter (variable_code#236 = PCT_LACCESS_POP15)
+      +- SubqueryAlias state_county
+         +- View (`state_county`, [FIPS#233,State#234,County#235,Variable_Code#236,Value#237])
+            +- Relation [FIPS#233,State#234,County#235,Variable_Code#236,Value#237] csv
+
+== Optimized Logical Plan ==
+Sort [state#234 ASC NULLS FIRST], true
++- Aggregate [state#234], [state#234, avg(cast(value#237 as double)) AS avg#270]
+   +- Project [State#234, Value#237]
+      +- Filter (isnotnull(variable_code#236) AND (variable_code#236 = PCT_LACCESS_POP15))
+         +- Relation [FIPS#233,State#234,County#235,Variable_Code#236,Value#237] csv
+
+== Physical Plan ==
+AdaptiveSparkPlan isFinalPlan=false
++- Sort [state#234 ASC NULLS FIRST], true, 0
+   +- Exchange rangepartitioning(state#234 ASC NULLS FIRST, 200), ENSURE_REQUIREMENTS, [plan_id=267]
+      +- HashAggregate(keys=[state#234], functions=[avg(cast(value#237 as double))], output=[state#234, avg#270])
+         +- Exchange hashpartitioning(state#234, 200), ENSURE_REQUIREMENTS, [plan_id=264]
+            +- HashAggregate(keys=[state#234], functions=[partial_avg(cast(value#237 as double))], output=[state#234, sum#282, count#283L])
+               +- Project [State#234, Value#237]
+                  +- Filter (isnotnull(variable_code#236) AND (variable_code#236 = PCT_LACCESS_POP15))
+                     +- FileScan csv [State#234,Variable_Code#236,Value#237] Batched: false, DataFilters: [isnotnull(Variable_Code#236), (Variable_Code#236 = PCT_LACCESS_POP15)], Format: CSV, Location: InMemoryFileIndex(1 paths)[file:/home/jovyan/data/StateAndCountyData.csv], PartitionFilters: [], PushedFilters: [IsNotNull(Variable_Code), EqualTo(Variable_Code,PCT_LACCESS_POP15)], ReadSchema: struct<State:string,Variable_Code:string,Value:string>
+

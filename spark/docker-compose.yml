@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  spark-pyspark:
+    build: .
+    ports:
+      - "8888:8888"  # Map container's port 8888 to host
+    volumes:
+      - ./src:/home/jovyan/src  # Mount source files
+      - ./data:/home/jovyan/data  # Mount data directory
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
